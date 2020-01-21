@@ -10,6 +10,25 @@ http.createServer((req, res) => {
       "Content-Type": "text/html"
     });
     fs.createReadStream("./tamplates/index.html").pipe(res);
+  } else if (access.pathname == "/form") {
+    if (req.method.toLowerCase() == "post") {
+      dataPost = "";
+      req.on('data', function (chunck) {
+        dataPost += chunck;
+      });
+      req.on('end', function () {
+        dataPost = qString.parse(dataPost);
+        res.writeHead(200, {
+          "Content-Type": "text/plain"
+        });
+        res.end(JSON.stringify(dataPost));
+      })
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/html"
+      });
+      fs.createReadStream("./tamplates/form.html").pipe(res);
+    }
   } else if (access.pathname == "/contact") {
     res.writeHead(200, {
       "Content-Type": "text/html"
